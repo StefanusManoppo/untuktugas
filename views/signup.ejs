@@ -1,0 +1,162 @@
+<% if (typeof user === 'undefined') user = null; %>
+<%- include('partials/header', {title: 'Sign Up - Bengkel Lam Jaya Motor', user: user}) %>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header text-center">
+                <h4 class="card-title mb-0">📝 Sign Up</h4>
+                <small class="text-muted">Buat Akun Baru - Bengkel Lam Jaya Motor</small>
+            </div>
+            <div class="card-body">
+                <!-- Error Message -->
+                <% if (error) { %>
+                <div class="alert alert-danger">
+                    <strong>❌ Signup Gagal!</strong><br>
+                    <%= error %>
+                </div>
+                <% } %>
+
+                <!-- Success Message -->
+                <% if (success) { %>
+                <div class="alert alert-success">
+                    <strong>✅ Signup Berhasil!</strong><br>
+                    <%= success %>
+                </div>
+                <% } %>
+                
+                <form method="POST" action="/signup" id="signupForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="username" name="username" 
+                               placeholder="Masukkan username (min. 3 karakter)" 
+                               required minlength="3" pattern="[a-zA-Z0-9_]+">
+                        <small class="text-muted">
+                            Minimal 3 karakter, hanya huruf, angka, dan underscore
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Masukkan password (min. 5 karakter)" 
+                               required minlength="5">
+                        <small class="text-muted">Minimal 5 karakter</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="retype_password" class="form-label">Retype Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" id="retype_password" name="retype_password" 
+                               placeholder="Masukkan ulang password" 
+                               required minlength="5">
+                        <small class="text-muted">Harus sama dengan password</small>
+                        <div id="passwordMatchMessage" class="mt-1"></div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <small>
+                            <strong>ℹ️ Informasi:</strong><br>
+                            • Akun baru akan memiliki role <strong>Visitor</strong><br>
+                            • Visitor hanya dapat melihat data (read-only)<br>
+                            • Untuk upgrade role, hubungi Administrator
+                        </small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100" id="submitBtn">
+                        Daftar Sekarang
+                    </button>
+                </form>
+                
+                <div class="mt-4 text-center">
+                    <hr>
+                    <p class="mb-2">Sudah punya akun?</p>
+                    <a href="/login" class="btn btn-outline-secondary w-100">
+                        Login di sini
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Real-time password match validation
+const password = document.getElementById('password');
+const retypePassword = document.getElementById('retype_password');
+const matchMessage = document.getElementById('passwordMatchMessage');
+const submitBtn = document.getElementById('submitBtn');
+
+function checkPasswordMatch() {
+    if (retypePassword.value === '') {
+        matchMessage.textContent = '';
+        matchMessage.className = '';
+        return;
+    }
+    
+    if (password.value === retypePassword.value) {
+        matchMessage.textContent = '✓ Password cocok';
+        matchMessage.className = 'text-success';
+        submitBtn.disabled = false;
+    } else {
+        matchMessage.textContent = '✗ Password tidak cocok';
+        matchMessage.className = 'text-danger';
+        submitBtn.disabled = true;
+    }
+}
+
+password.addEventListener('input', checkPasswordMatch);
+retypePassword.addEventListener('input', checkPasswordMatch);
+
+// Form validation on submit
+document.getElementById('signupForm').addEventListener('submit', function(e) {
+    const usernameVal = document.getElementById('username').value.trim();
+    const passwordVal = document.getElementById('password').value;
+    const retypePasswordVal = document.getElementById('retype_password').value;
+    
+    // Check if all fields are filled
+    if (!usernameVal || !passwordVal || !retypePasswordVal) {
+        e.preventDefault();
+        alert('❌ Semua field wajib diisi!');
+        return false;
+    }
+    
+    // Check username length
+    if (usernameVal.length < 3) {
+        e.preventDefault();
+        alert('❌ Username minimal 3 karakter!');
+        return false;
+    }
+    
+    // Check username pattern
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    if (!usernameRegex.test(usernameVal)) {
+        e.preventDefault();
+        alert('❌ Username hanya boleh menggunakan huruf, angka, dan underscore!');
+        return false;
+    }
+    
+    // Check password length
+    if (passwordVal.length < 5) {
+        e.preventDefault();
+        alert('❌ Password minimal 5 karakter!');
+        return false;
+    }
+    
+    // Check if passwords match
+    if (passwordVal !== retypePasswordVal) {
+        e.preventDefault();
+        alert('❌ Password dan Retype Password tidak cocok!');
+        return false;
+    }
+    
+    // All validations passed
+    return true;
+});
+
+// Username validation - only allow alphanumeric and underscore
+document.getElementById('username').addEventListener('input', function(e) {
+    this.value = this.value.replace(/[^a-zA-Z0-9_]/g, '');
+});
+</script>
+
+<%- include('partials/footer') %>

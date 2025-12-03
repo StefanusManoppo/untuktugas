@@ -136,9 +136,20 @@ app.get('/logout', (req, res) => {
     });
 });
 
+app.use((req, res) => {
+    res.status(404).render('error', {
+        title: 'Page Not Found',
+        user: req.session.user || null,
+        message: 'Halaman yang Anda cari tidak ditemukan.'
+    });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server berjalan di http://localhost:${PORT}`);
     console.log('Bengkel Lam Jaya Motor - Specialist Tune Up');
-    console.log('Admin: admin/12345 | Montir: montir/montir123 | Visitor: visitor/visitor123');
+    console.log('Default Login Credentials:');
+    console.log('Admin: admin/12345');
+    console.log('Montir: montir/montir123');
+    console.log('Visitor: visitor/visitor123');
 });

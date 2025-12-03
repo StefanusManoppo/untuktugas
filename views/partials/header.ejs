@@ -27,15 +27,16 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/about">About Us</a>
                         </li>
-                    <% } else { %>
-
                     <% } %>
                 </ul>
                 
                 <ul class="navbar-nav">
                     <% if (user) { %>
                         <li class="nav-item">
-                            <span class="navbar-text me-3">Halo, <%= user.username %></span>
+                            <span class="navbar-text me-3">
+                                Halo, <%= user.username %> 
+                                <span class="badge bg-secondary"><%= user.role %></span>
+                            </span>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/logout">Logout</a>
@@ -43,6 +44,11 @@
                     <% } else { %>
                         <li class="nav-item">
                             <a class="nav-link" href="/login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-primary ms-2" href="/signup" style="color: white;">
+                                Sign Up
+                            </a>
                         </li>
                     <% } %>
                 </ul>
