@@ -117,6 +117,7 @@
     <% } else { %>
         <div class="col-md-12">
     <% } %>
+            <% if (user.role !== 'visitor') { %>
             <div class="card mt-3">
                 <div class="card-header">
                     <h5 class="card-title mb-0">Tambah Banyak Pengeluaran</h5>
@@ -168,6 +169,7 @@
                     </form>
                 </div>
             </div>
+            <% } %>
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">Daftar Pengeluaran</h5>
