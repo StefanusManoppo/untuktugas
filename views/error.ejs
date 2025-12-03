@@ -1,0 +1,18 @@
+<%- include('partials/header', {title: title, user: user}) %>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <div style="font-size: 5rem; margin-bottom: 1rem;">🚫</div>
+                <h2 class="text-danger mb-3">Access Denied</h2>
+                <p class="lead"><%= message %></p>
+                <div class="mt-4">
+                    <a href="/" class="btn btn-primary">Kembali ke Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

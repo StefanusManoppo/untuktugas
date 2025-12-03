@@ -1,0 +1,72 @@
+<%- include('partials/header', {title: 'About Us - Bengkel Lam Jaya Motor', user: user}) %>
+
+<div class="row">
+    <div class="col-12">
+        <div class="about-header">
+            <h1>About Us</h1>
+            <p class="lead text-gray">Mengenal Lebih Dekat Bengkel Lam Jaya Motor</p>
+        </div>
+    </div>
+</div>
+
+<div class="row about-section">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-4">Lam Jaya Motor</h3>
+                <p class="card-text">
+                    Lam Jaya Motor merupakan bengkel motor terpercaya yang siap melayani berbagai
+                    kebutuhan perawatan dan perbaikan kendaraan roda dua Anda. Dengan pengalaman dan dedikasi
+                    tinggi, kami berkomitmen memberikan pelayanan terbaik untuk menjaga performa motor Anda tetap
+                    optimal.
+                </p>
+
+                <h4 class="mt-5 mb-3">Layanan Kami</h4>
+                <p class="card-text">
+                    Kami menyediakan berbagai layanan perawatan dan perbaikan motor, termasuk
+                    service rutin untuk memastikan motor Anda selalu dalam kondisi prima. Tim mekanik profesional
+                    kami siap menangani ganti oli dengan produk berkualitas, perbaikan mesin untuk berbagai jenis
+                    kerusakan, dan penggantian ban sesuai kebutuhan Anda.
+                </p>
+                <p class="card-text">
+                    Selain itu, Lam Jaya Motor juga melayani tune up untuk meningkatkan performa
+                    mesin, bore up bagi Anda yang menginginkan peningkatan kapasitas mesin, serta service
+                    shockbreaker untuk kenyamanan berkendara yang lebih baik. Setiap pekerjaan dilakukan dengan
+                    teliti menggunakan peralatan modern dan suku cadang berkualitas.
+                </p>
+
+                <h4 class="mt-5 mb-3">Mengapa Memilih Kami</h4>
+                <p class="card-text">
+                    Di Lam Jaya Motor, kepuasan pelanggan adalah prioritas utama. Kami mengutamakan
+                    kejujuran, transparansi harga, dan hasil kerja yang memuaskan. Percayakan perawatan motor Anda
+                    kepada kami, dan rasakan perbedaan pelayanan yang profesional dan ramah.
+                </p>
+
+                <div class="mt-4 p-3 bg-dark rounded">
+                    <h5 class="mb-3">Informasi Kontak</h5>
+                    <p class="text-light mb-2">
+                        <strong>Alamat:</strong><br>
+                        Dekat Snack Time • Burger Coffee & Friends,<br>
+                        Jl. R. Sanim – Jl. Curug Agung, Tanah Baru, Kecamatan Beji,<br>
+                        Kota Depok, Jawa Barat 16426
+                    </p>
+                    <p class="text-light mb-2">
+                        <strong>WhatsApp:</strong> (+62) 852-8072-0328
+                    </p>
+                    <p class="text-light mb-0">
+                        <strong>Jam Operasional:</strong> Setiap Hari 07.00 – 21.00
+                    </p>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <a href="/" class="btn btn-primary me-2">Kembali ke Home</a>
+                    <% if (!user) { %>
+                        <a href="/login" class="btn btn-secondary">Login</a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

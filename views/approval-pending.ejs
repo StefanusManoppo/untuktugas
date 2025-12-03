@@ -1,0 +1,195 @@
+<%- include('partials/header', {title: title, user: user}) %>
+
+<div class="row">
+    <div class="col-12">
+        <h2>✅ Pending Approval Requests</h2>
+        <p class="text-gray">Review dan approve request dari montir</p>
+
+        <% if (success) { %>
+            <div class="alert alert-success"><%= success %></div>
+        <% } %>
+
+        <% if (error) { %>
+            <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Daftar Request Pending</h5>
+            </div>
+            <div class="card-body">
+                <% if (requests && requests.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Montir</th>
+                                    <th>Aksi</th>
+                                    <th>Tabel</th>
+                                    <th>Data</th>
+                                    <th>Tanggal Request</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% requests.forEach((req, index) => { %>
+                                    <%
+                                        const data = JSON.parse(req.data_json);
+                                    %>
+                                    <tr>
+                                        <td><%= index + 1 %></td>
+                                        <td><strong><%= req.montir_name %></strong></td>
+                                        <td>
+                                            <% if (req.action_type === 'create') { %>
+                                                <span class="badge bg-success">CREATE</span>
+                                            <% } else if (req.action_type === 'update') { %>
+                                                <span class="badge bg-warning">UPDATE</span>
+                                            <% } else { %>
+                                                <span class="badge bg-danger">DELETE</span>
+                                            <% } %>
+                                        </td>
+                                        <td><%= req.table_name %></td>
+                                        <td>
+                                            <small>
+                                                <% if (req.action_type === 'delete') { %>
+                                                    ID: <%= req.item_id %>
+                                                <% } else { %>
+                                                    <% if (data.nama_barang) { %>
+                                                        Nama: <%= data.nama_barang %><br>
+                                                    <% } %>
+                                                    <% if (data.deskripsi) { %>
+                                                        Deskripsi: <%= data.deskripsi %><br>
+                                                    <% } %>
+                                                    <% if (data.jumlah) { %>
+                                                        Jumlah: <%= data.jumlah %><br>
+                                                    <% } %>
+                                                    <% if (data.harga) { %>
+                                                        Harga: Rp <%= Number(data.harga).toLocaleString('id-ID') %><br>
+                                                    <% } %>
+                                                    <% if (data.nominal) { %>
+                                                        Nominal: Rp <%= Number(data.nominal).toLocaleString('id-ID') %><br>
+                                                    <% } %>
+                                                    <% if (data.kategori) { %>
+                                                        Kategori: <%= data.kategori %>
+                                                    <% } %>
+                                                <% } %>
+                                            </small>
+                                        </td>
+                                        <td><%= new Date(req.created_at).toLocaleString('id-ID') %></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-success mb-1 approve-btn" 
+                                                    data-id="<%= req.id %>">
+                                                ✓ Approve
+                                            </button>
+                                            <button class="btn btn-sm btn-danger reject-btn" 
+                                                    data-id="<%= req.id %>">
+                                                ✗ Reject
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="text-center py-4">
+                        <p class="text-muted">Tidak ada pending request</p>
+                        <small>Semua request sudah di-process</small>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Approve Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">Approve Request</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="approveForm" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="approve_notes" class="form-label">Catatan Admin (Optional)</label>
+                        <textarea class="form-control" id="approve_notes" name="admin_notes" rows="3"></textarea>
+                    </div>
+                    <p class="text-success">Request akan di-approve dan diterapkan ke database.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">Approve</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">Reject Request</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="rejectForm" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="reject_notes" class="form-label">Alasan Reject</label>
+                        <textarea class="form-control" id="reject_notes" name="admin_notes" rows="3" required></textarea>
+                    </div>
+                    <p class="text-danger">Request akan ditolak dan tidak diterapkan.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Reject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Event delegation untuk approve buttons
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle approve buttons
+    document.querySelectorAll('.approve-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            approveRequest(id);
+        });
+    });
+    
+    // Handle reject buttons
+    document.querySelectorAll('.reject-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            rejectRequest(id);
+        });
+    });
+});
+
+function approveRequest(id) {
+    const form = document.getElementById('approveForm');
+    form.action = '/approval/approve/' + id;
+    const modal = new bootstrap.Modal(document.getElementById('approveModal'));
+    modal.show();
+}
+
+function rejectRequest(id) {
+    const form = document.getElementById('rejectForm');
+    form.action = '/approval/reject/' + id;
+    const modal = new bootstrap.Modal(document.getElementById('rejectModal'));
+    modal.show();
+}
+</script>
+
+<%- include('partials/footer') %>

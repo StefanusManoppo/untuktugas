@@ -1,0 +1,96 @@
+<%- include('partials/header', {title: title, user: user}) %>
+
+<div class="row">
+    <div class="col-12">
+        <div class="jumbotron">
+            <h1 class="display-4">🔧 Dashboard Montir</h1>
+            <p class="lead">Selamat datang, <%= user.username %>! - Dengan Sistem Approval</p>
+            <hr class="my-4">
+            <p>Kelola data dengan approval admin untuk setiap perubahan</p>
+            <small class="text-warning">⚠️ Setiap perubahan memerlukan persetujuan Admin</small>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-primary h-100">
+            <div class="card-body">
+                <h5 class="card-title">📦 Data Stok Barang</h5>
+                <p class="card-text">Kelola stok (dengan approval)</p>
+                <a href="/stok/barang" class="btn btn-light">Kelola Stok</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-success h-100">
+            <div class="card-body">
+                <h5 class="card-title">💰 Laporan Keuangan</h5>
+                <p class="card-text">Kelola keuangan (dengan approval)</p>
+                <div class="mt-3">
+                    <a href="/laporan/pemasukan" class="btn btn-light btn-sm me-2">Pemasukan</a>
+                    <a href="/laporan/pengeluaran" class="btn btn-light btn-sm">Pengeluaran</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-info h-100">
+            <div class="card-body">
+                <h5 class="card-title">📋 My Requests</h5>
+                <p class="card-text">Lihat status approval Anda</p>
+                <a href="/approval/my-requests" class="btn btn-light">Lihat Status</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="alert alert-info">
+            <h5>ℹ️ Informasi Penting untuk Montir</h5>
+            <ul class="mb-0">
+                <li>Setiap perubahan data (tambah/edit/hapus) memerlukan approval dari Admin</li>
+                <li>Request Anda akan masuk ke queue approval admin</li>
+                <li>Pantau status request Anda di menu "My Requests"</li>
+                <li>Setelah di-approve, perubahan akan otomatis diterapkan</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Akses Cepat Montir</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-3">
+                        <a href="/stok/barang" class="btn btn-outline-primary w-100">
+                            <div style="font-size: 2rem;">📦</div>
+                            <small>Stok Barang</small>
+                        </a>
+                    </div>
+                    <div class="col-md-4 text-center mb-3">
+                        <a href="/laporan/pemasukan" class="btn btn-outline-success w-100">
+                            <div style="font-size: 2rem;">💰</div>
+                            <small>Pemasukan</small>
+                        </a>
+                    </div>
+                    <div class="col-md-4 text-center mb-3">
+                        <a href="/approval/my-requests" class="btn btn-outline-info w-100">
+                            <div style="font-size: 2rem;">📋</div>
+                            <small>My Requests</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

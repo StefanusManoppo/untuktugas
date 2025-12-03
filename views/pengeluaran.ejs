@@ -1,0 +1,173 @@
+<%- include('partials/header', {title: title, user: user}) %>
+
+<div class="row">
+    <div class="col-12">
+        <h2>📊 Laporan Pengeluaran</h2>
+        <p class="text-gray">
+            <% if (user.role === 'admin') { %>
+                Full Access - Kelola pengeluaran
+            <% } else if (user.role === 'montir') { %>
+                Kelola dengan Approval - Perubahan memerlukan persetujuan admin
+            <% } else { %>
+                Read Only - Dapat filter tanggal dan kategori
+            <% } %>
+        </p>
+
+        <% if (success) { %>
+            <div class="alert alert-success"><%= success %></div>
+        <% } %>
+
+        <% if (error) { %>
+            <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4 mb-4">
+        <div class="card summary-card summary-expense">
+            <div class="card-body">
+                <h5 class="card-title">Total Pengeluaran</h5>
+                <div class="amount">Rp <%= Number(total).toLocaleString('id-ID') %></div>
+                <small class="text-muted">Seluruh waktu</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Section - SEMUA ROLE BISA AKSES -->
+<div class="row">
+    <div class="col-12">
+        <div class="filter-section">
+            <h5>🔍 Filter Data</h5>
+            <form method="GET" class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label for="start_date" class="form-label">Tanggal Mulai</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date" value="<%= start_date %>">
+                </div>
+                <div class="col-md-3">
+                    <label for="end_date" class="form-label">Tanggal Akhir</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date" value="<%= end_date %>">
+                </div>
+                <div class="col-md-3">
+                    <label for="kategori" class="form-label">Kategori</label>
+                    <select class="form-select" id="kategori" name="kategori">
+                        <option value="all" <%= kategori === 'all' ? 'selected' : '' %>>Semua Kategori</option>
+                        <option value="bahan" <%= kategori === 'bahan' ? 'selected' : '' %>>Bahan</option>
+                        <option value="operasional" <%= kategori === 'operasional' ? 'selected' : '' %>>Operasional</option>
+                        <option value="gaji" <%= kategori === 'gaji' ? 'selected' : '' %>>Gaji</option>
+                        <option value="listrik" <%= kategori === 'listrik' ? 'selected' : '' %>>Listrik</option>
+                        <option value="lainnya" <%= kategori === 'lainnya' ? 'selected' : '' %>>Lainnya</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <% if (user.role !== 'visitor') { %>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Tambah Pengeluaran</h5>
+                    <% if (user.role === 'montir') { %>
+                        <small class="text-warning">⚠️ Memerlukan approval admin</small>
+                    <% } %>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/laporan/pengeluaran">
+                        <div class="mb-3">
+                            <label for="deskripsi" class="form-label">Deskripsi</label>
+                            <input type="text" class="form-control" id="deskripsi" name="deskripsi" 
+                                   placeholder="Contoh: Beli Oli, Bayar Listrik" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nominal" class="form-label">Nominal (Rp)</label>
+                            <input type="number" class="form-control" id="nominal" name="nominal" 
+                                   placeholder="50000" min="0" step="1000" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="kategori_input" class="form-label">Kategori</label>
+                            <select class="form-select" id="kategori_input" name="kategori" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="bahan">Bahan</option>
+                                <option value="operasional">Operasional</option>
+                                <option value="gaji">Gaji</option>
+                                <option value="listrik">Listrik</option>
+                                <option value="lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-danger w-100">
+                            <% if (user.role === 'admin') { %>
+                                Tambah Pengeluaran
+                            <% } else { %>
+                                Request Tambah
+                            <% } %>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+    <% } else { %>
+        <div class="col-md-12">
+    <% } %>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Daftar Pengeluaran</h5>
+                </div>
+                <div class="card-body">
+                    <% if (pengeluaran && pengeluaran.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal</th>
+                                        <th>Deskripsi</th>
+                                        <th>Kategori</th>
+                                        <th>Nominal</th>
+                                        <th>Waktu Input</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% pengeluaran.forEach((item, index) => { %>
+                                        <tr>
+                                            <td><%= new Date(item.tanggal).toLocaleDateString('id-ID') %></td>
+                                            <td><%= item.deskripsi %></td>
+                                            <td>
+                                                <span class="badge bg-secondary"><%= item.kategori %></span>
+                                            </td>
+                                            <td class="text-expense">Rp <%= Number(item.nominal).toLocaleString('id-ID') %></td>
+                                            <td><%= new Date(item.created_at).toLocaleString('id-ID') %></td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <div class="text-center py-4">
+                            <p class="text-muted">Belum ada data pengeluaran</p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+</div>
+
+<% if (user.role === 'visitor') { %>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <strong>ℹ️ Mode Read Only</strong><br>
+                Anda dapat melihat data dan menggunakan filter. Untuk menambah data, hubungi Administrator.
+            </div>
+        </div>
+    </div>
+<% } %>
+
+<%- include('partials/footer') %>

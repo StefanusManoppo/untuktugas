@@ -1,0 +1,83 @@
+<%- include('partials/header', {title: 'Laporan Stok Barang - Bengkel Lam Jaya Motor', user: user}) %>
+
+<div class="row">
+    <div class="col-12">
+        <h2>Laporan Stok Barang</h2>
+        <p class="text-gray">Bengkel Lam Jaya Motor - Management Inventory</p>
+
+        <% if (error) { %>
+            <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Data Laporan Stok</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <form method="GET" class="d-inline">
+                        <select name="kategori" class="form-select" onchange="this.form.submit()">
+                            <option value="all" <%= kategori == 'all' ? 'selected' : '' %>>Semua Kategori</option>
+                            <option value="Oli" <%= kategori == 'Oli' ? 'selected' : '' %>>Oli</option>
+                            <option value="Ban" <%= kategori == 'Ban' ? 'selected' : '' %>>Ban</option>
+                            <option value="Aki" <%= kategori == 'Aki' ? 'selected' : '' %>>Aki</option>
+                            <option value="Sparepart" <%= kategori == 'Sparepart' ? 'selected' : '' %>>Sparepart</option>
+                            <option value="Tools" <%= kategori == 'Tools' ? 'selected' : '' %>>Tools</option>
+                            <option value="Lainnya" <%= kategori == 'Lainnya' ? 'selected' : '' %>>Lainnya</option>
+                        </select>
+                    </form>
+                    <button class="btn btn-primary" onclick="window.print()">
+                        Print Laporan
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <% if (stok && stok.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Barang</th>
+                                    <th>Jumlah</th>
+                                    <th>Harga</th>
+                                    <th>Kategori</th>
+                                    <th>Total Nilai</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% let totalNilai = 0; %>
+                                <% stok.forEach((item, index) => { %>
+                                    <% const nilai = item.jumlah * item.harga; %>
+                                    <% totalNilai += nilai; %>
+                                    <tr>
+                                        <td><%= index + 1 %></td>
+                                        <td><%= item.nama_barang %></td>
+                                        <td><%= item.jumlah %></td>
+                                        <td>Rp <%= item.harga.toLocaleString('id-ID') %></td>
+                                        <td>
+                                            <span class="badge bg-secondary"><%= item.kategori %></span>
+                                        </td>
+                                        <td>Rp <%= nilai.toLocaleString('id-ID') %></td>
+                                    </tr>
+                                <% }); %>
+                                <tr class="table-primary">
+                                    <td colspan="5" class="text-end"><strong>Total Nilai Stok:</strong></td>
+                                    <td><strong>Rp <%= totalNilai.toLocaleString('id-ID') %></strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="text-center py-4">
+                        <p class="text-muted">Tidak ada data laporan untuk ditampilkan</p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

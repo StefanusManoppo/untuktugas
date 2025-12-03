@@ -1,0 +1,103 @@
+<%- include('partials/header', {title: title, user: user}) %>
+
+        <div class="row">
+            <div class="col-12">
+                <h2>Riwayat Transaksi</h2>
+                <p class="text-gray">Gabungan Data Pemasukan dan Pengeluaran</p>
+                
+                <% if (success) { %>
+                <div class="alert alert-success"><%= success %></div>
+                <% } %>
+                <% if (error) { %>
+                <div class="alert alert-danger"><%= error %></div>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <!-- Summary Card -->
+            <div class="col-md-4 mb-4">
+                <div class="card summary-card summary-balance">
+                    <div class="card-body">
+                        <h5 class="card-title">Saldo Akhir</h5>
+                        <div class="amount">Rp <%= Number(saldo).toLocaleString('id-ID') %></div>
+                        <small class="text-muted">Pemasukan - Pengeluaran</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="filter-section">
+                    <h5>Filter Data</h5>
+                    <form method="GET" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="start_date" class="form-label">Tanggal Mulai</label>
+                            <input type="date" class="form-control" id="start_date" name="start_date" value="<%= start_date %>">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="end_date" class="form-label">Tanggal Akhir</label>
+                            <input type="date" class="form-control" id="end_date" name="end_date" value="<%= end_date %>">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">Filter</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Daftar Transaksi</h5>
+                    </div>
+                    <div class="card-body">
+                        <% if (transaksi && transaksi.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal</th>
+                                        <th>Jenis</th>
+                                        <th>Deskripsi</th>
+                                        <th>Nominal</th>
+                                        <th>Waktu Input</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% transaksi.forEach((item, index) => { %>
+                                    <tr>
+                                        <td><%= new Date(item.tanggal).toLocaleDateString('id-ID') %></td>
+                                        <td>
+                                            <% if (item.jenis === 'Pemasukan') { %>
+                                                <span class="badge badge-income">Pemasukan</span>
+                                            <% } else { %>
+                                                <span class="badge badge-expense">Pengeluaran</span>
+                                            <% } %>
+                                        </td>
+                                        <td><%= item.deskripsi %></td>
+                                        <td class="<%= item.jenis === 'Pemasukan' ? 'text-income' : 'text-expense' %>">
+                                            Rp <%= Number(item.nominal).toLocaleString('id-ID') %>
+                                        </td>
+                                        <td><%= new Date(item.created_at).toLocaleString('id-ID') %></td>
+                                    </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <% } else { %>
+                        <div class="text-center py-4">
+                            <p class="text-muted">Belum ada data transaksi</p>
+                            <small>Silakan tambah data pemasukan atau pengeluaran terlebih dahulu</small>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<%- include('partials/footer') %>

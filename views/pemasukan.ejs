@@ -1,0 +1,124 @@
+<%- include('partials/header', {title: title, user: user}) %>
+
+<div class="row">
+    <div class="col-12">
+        <h2>💰 Laporan Pemasukan</h2>
+        <p class="text-gray">
+            <% if (user.role === 'admin') { %>
+                Full Access - Kelola pemasukan
+            <% } else if (user.role === 'montir') { %>
+                Kelola dengan Approval - Perubahan memerlukan persetujuan admin
+            <% } else { %>
+                Read Only - Hanya dapat melihat data
+            <% } %>
+        </p>
+        
+        <% if (success) { %>
+        <div class="alert alert-success"><%= success %></div>
+        <% } %>
+        <% if (error) { %>
+        <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4 mb-4">
+        <div class="card summary-card summary-income">
+            <div class="card-body">
+                <h5 class="card-title">Total Pemasukan</h5>
+                <div class="amount">Rp <%= Number(total).toLocaleString('id-ID') %></div>
+                <small class="text-muted">Seluruh waktu</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <% if (user.role !== 'visitor') { %>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Tambah Pemasukan</h5>
+                    <% if (user.role === 'montir') { %>
+                        <small class="text-warning">⚠️ Memerlukan approval admin</small>
+                    <% } %>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/laporan/pemasukan">
+                        <div class="mb-3">
+                            <label for="deskripsi" class="form-label">Deskripsi</label>
+                            <input type="text" class="form-control" id="deskripsi" name="deskripsi" 
+                                   placeholder="Contoh: Service Motor, Ganti Oli" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nominal" class="form-label">Nominal (Rp)</label>
+                            <input type="number" class="form-control" id="nominal" name="nominal" 
+                                   placeholder="100000" min="0" step="1000" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">
+                            <% if (user.role === 'admin') { %>
+                                Tambah Pemasukan
+                            <% } else { %>
+                                Request Tambah
+                            <% } %>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+    <% } else { %>
+        <div class="col-md-12">
+    <% } %>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Daftar Pemasukan</h5>
+                </div>
+                <div class="card-body">
+                    <% if (pemasukan && pemasukan.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Deskripsi</th>
+                                    <th>Nominal</th>
+                                    <th>Waktu Input</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% pemasukan.forEach((item, index) => { %>
+                                <tr>
+                                    <td><%= new Date(item.tanggal).toLocaleDateString('id-ID') %></td>
+                                    <td><%= item.deskripsi %></td>
+                                    <td class="text-income">Rp <%= Number(item.nominal).toLocaleString('id-ID') %></td>
+                                    <td><%= new Date(item.created_at).toLocaleString('id-ID') %></td>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } else { %>
+                    <div class="text-center py-4">
+                        <p class="text-muted">Belum ada data pemasukan</p>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+</div>
+
+<% if (user.role === 'visitor') { %>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <strong>ℹ️ Mode Read Only</strong><br>
+                Anda hanya dapat melihat data pemasukan. Untuk menambah data, hubungi Administrator.
+            </div>
+        </div>
+    </div>
+<% } %>
+
+<%- include('partials/footer') %>

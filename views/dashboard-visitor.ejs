@@ -1,0 +1,92 @@
+<%- include('partials/header', {title: title, user: user}) %>
+
+<div class="row">
+    <div class="col-12">
+        <div class="jumbotron">
+            <h1 class="display-4">👁️ Dashboard Visitor</h1>
+            <p class="lead">Selamat datang, <%= user.username %>! - Read Only Access</p>
+            <hr class="my-4">
+            <p>Anda dapat melihat data stok dan laporan keuangan (hanya baca)</p>
+            <small class="text-info">ℹ️ Akses Anda terbatas untuk melihat data saja</small>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-primary h-100">
+            <div class="card-body">
+                <h5 class="card-title">📦 Lihat Stok Barang</h5>
+                <p class="card-text">Melihat data inventory</p>
+                <a href="/stok/barang" class="btn btn-light">Lihat Stok</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-success h-100">
+            <div class="card-body">
+                <h5 class="card-title">💰 Lihat Pemasukan</h5>
+                <p class="card-text">Melihat laporan pemasukan</p>
+                <a href="/laporan/pemasukan" class="btn btn-light">Lihat Pemasukan</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-danger h-100">
+            <div class="card-body">
+                <h5 class="card-title">📊 Lihat Pengeluaran</h5>
+                <p class="card-text">Melihat laporan pengeluaran</p>
+                <a href="/laporan/pengeluaran" class="btn btn-light">Lihat Pengeluaran</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="alert alert-warning">
+            <h5>⚠️ Informasi Akses Visitor</h5>
+            <ul class="mb-0">
+                <li><strong>Anda hanya dapat MELIHAT data</strong>, tidak dapat menambah/edit/hapus</li>
+                <li>Akses ke filter tanggal tersedia untuk laporan keuangan</li>
+                <li>Untuk akses penuh, hubungi Administrator</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Akses Cepat Visitor (Read Only)</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-3">
+                        <a href="/stok/barang" class="btn btn-outline-primary w-100">
+                            <div style="font-size: 2rem;">📦</div>
+                            <small>Stok Barang</small>
+                        </a>
+                    </div>
+                    <div class="col-md-4 text-center mb-3">
+                        <a href="/laporan/pemasukan" class="btn btn-outline-success w-100">
+                            <div style="font-size: 2rem;">💰</div>
+                            <small>Pemasukan</small>
+                        </a>
+                    </div>
+                    <div class="col-md-4 text-center mb-3">
+                        <a href="/laporan/pengeluaran" class="btn btn-outline-danger w-100">
+                            <div style="font-size: 2rem;">📊</div>
+                            <small>Pengeluaran</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

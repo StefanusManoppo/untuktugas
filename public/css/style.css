@@ -1,0 +1,657 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* CSS Variables */
+:root {
+    --primary-dark: #0A192F;
+    --primary-black: #1C1C1C;
+    --accent-maroon: #5A0F0F;
+    --accent-steel: #2C3E50;
+    --text-light: #EAEAEA;
+    --text-gray: #B0B0B0;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --hover-glow: rgba(90, 15, 15, 0.3);
+    --whatsapp-green: #25D366;
+    --income-green: #27AE60;
+    --expense-red: #F74C3C;
+}
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-black) 100%);
+    color: var(--text-light);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* Navbar Styles */
+.navbar-dark.bg-dark {
+    background-color: var(--primary-black) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--text-light) !important;
+    letter-spacing: 1px;
+}
+
+.navbar-nav .nav-link {
+    color: var(--text-gray) !important;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+    border-radius: 5px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--text-light) !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-text {
+    color: var(--text-gray) !important;
+}
+
+/* Jumbotron/Hero Section */
+.jumbotron {
+    background: linear-gradient(135deg, rgba(10, 25, 47, 0.9) 0%, rgba(28, 28, 28, 0.9) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 3rem 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.jumbotron::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-maroon), transparent);
+}
+
+.jumbotron h1 {
+    font-weight: 600;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--text-light) 0%, var(--text-gray) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.jumbotron .lead {
+    color: var(--text-gray);
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.jumbotron hr {
+    border-color: var(--accent-maroon);
+    opacity: 0.5;
+    margin: 1.5rem 0;
+}
+
+/* Card Styles */
+.card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-maroon);
+    box-shadow: 0 10px 30px var(--hover-glow);
+}
+
+.card-header {
+    background: rgba(90, 15, 15, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 1.5rem;
+}
+
+.card-title {
+    color: var(--text-light);
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-text {
+    color: var(--text-gray);
+}
+
+/* Dashboard Admin Cards */
+.card.text-white .card-body {
+    padding: 2rem 1.5rem;
+}
+
+.card.text-white .card-title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+.card.text-white .btn-light {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-weight: 500;
+    border: none;
+}
+
+.card.text-white .btn-light:hover {
+    background: white;
+    transform: translateY(-2px);
+}
+
+/* Quick Access Buttons */
+.btn-outline-primary,
+.btn-outline-success,
+.btn-outline-danger,
+.btn-outline-info {
+    border: 2px solid;
+    padding: 1rem 0.5rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+    font-weight: 500;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-success:hover,
+.btn-outline-danger:hover,
+.btn-outline-info:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-outline-primary {
+    border-color: #E74C3C;
+    color: #FFFFFF !important;
+    background: rgba(231, 76, 60, 0.15);
+}
+
+.btn-outline-primary:hover {
+    background: rgba(231, 76, 60, 0.3);
+    border-color: #FF6B5B;
+}
+
+.btn-outline-success {
+    border-color: #27AE60;
+    color: #FFFFFF !important;
+    background: rgba(39, 174, 96, 0.15);
+}
+
+.btn-outline-success:hover {
+    background: rgba(39, 174, 96, 0.3);
+    border-color: #2ECC71;
+}
+
+.btn-outline-danger {
+    border-color: #E67E22;
+    color: #FFFFFF !important;
+    background: rgba(230, 126, 34, 0.15);
+}
+
+.btn-outline-danger:hover {
+    background: rgba(230, 126, 34, 0.3);
+    border-color: #F39C12;
+}
+
+.btn-outline-info {
+    border-color: #3498DB;
+    color: #FFFFFF !important;
+    background: rgba(52, 152, 219, 0.15);
+}
+
+.btn-outline-info:hover {
+    background: rgba(52, 152, 219, 0.3);
+    border-color: #5DADE2;
+}
+
+/* Button Styles */
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-maroon) 0%, #7A1F1F 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #7A1F1F 0%, var(--accent-maroon) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px var(--hover-glow);
+}
+
+.btn-secondary {
+    background: var(--accent-steel);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #34495E;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--income-green) 0%, #229954 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--expense-red) 0%, #C0392B 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #E67E22 0%, #D35400 100%);
+    border: none;
+    border-radius: 6px;
+    color: white;
+}
+
+.btn-sm {
+    padding: 5px 12px;
+    font-size: 0.875rem;
+}
+
+/* Table Styles */
+.table {
+    background: rgba(30, 30, 40, 0.8);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table th {
+    background: rgba(90, 15, 15, 0.6);
+    border: none;
+    color: #FFFFFF !important;
+    font-weight: 600;
+    padding: 1rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.table td {
+    border-color: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    color: #E8E8E8 !important;
+    vertical-align: middle;
+    font-weight: 400;
+    background: rgba(30, 35, 45, 0.6);
+}
+
+/* Striped rows */
+.table-striped tbody tr:nth-of-type(odd) td {
+    background-color: rgba(45, 52, 65, 0.7);
+}
+
+.table-striped tbody tr:nth-of-type(even) td {
+    background-color: rgba(30, 35, 45, 0.5);
+}
+
+/* Hover effect - highlight baris saat mouse hover */
+.table-striped tbody tr:hover td {
+    background-color: rgba(90, 15, 15, 0.25) !important;
+    color: #FFFFFF !important;
+    transition: all 0.2s ease;
+}
+
+/* Specific text colors in tables */
+.table td:first-child {
+    color: #FFFFFF !important;
+    font-weight: 500;
+}
+
+/* Income/Expense Badges */
+.badge-income {
+    background: var(--income-green) !important;
+    color: white;
+}
+
+.badge-expense {
+    background: var(--expense-red) !important;
+    color: white;
+}
+
+/* Badge Styles */
+.badge {
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.badge.bg-secondary {
+    background: var(--accent-steel) !important;
+    color: var(--text-light);
+}
+
+/* Summary Cards */
+.summary-card {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.summary-card .amount {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+}
+
+.summary-income .amount {
+    color: var(--income-green);
+}
+
+.summary-expense .amount {
+    color: var(--expense-red);
+}
+
+.summary-balance .amount {
+    color: var(--text-light);
+}
+
+/* Premium Form Styles */
+.form-control {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: var(--text-light);
+    padding: 12px 15px;
+    font-weight: 400;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    height: 48px;
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--accent-maroon);
+    color: var(--text-light);
+    box-shadow: 0 0 0 0.2rem rgba(90, 15, 15, 0.3);
+    transform: translateY(-1px);
+}
+
+.form-label {
+    color: var(--text-light);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* CONSISTENT DROPDOWN STYLING */
+.form-select {
+    background: rgba(255, 255, 255, 0.08) url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: #FFFFFF !important;
+    padding: 12px 15px;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    appearance: none;
+    font-size: 14px;
+    height: 48px;
+    width: 100%;
+}
+
+.form-select:focus {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-color: var(--accent-maroon);
+    color: #FFFFFF !important;
+    box-shadow: 0 0 0 0.2rem rgba(90, 15, 15, 0.3);
+    transform: translateY(-1px);
+}
+
+.form-select option {
+    background: #2C2C3E !important;
+    color: #FFFFFF !important;
+    padding: 15px !important;
+    font-size: 14px;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+}
+
+.form-select option:first-child {
+    color: #B0B0B0 !important;
+    font-style: italic;
+}
+
+/* WhatsApp Icon Styling */
+.phone-number {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    font-weight: 500;
+}
+
+/* Alert Styles */
+.alert {
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.alert-success {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+    border-left: 4px solid #2ecc71;
+}
+
+.alert-danger {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    border-left: 4px solid #e74c3c;
+}
+
+/* Footer Styles */
+footer {
+    background: var(--primary-black);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 3rem;
+    padding: 2rem 0;
+}
+
+/* Login Page Specific */
+.card .card-header {
+    background: rgba(90, 15, 15, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Dashboard Cards */
+.bg-primary {
+    background: linear-gradient(135deg, var(--accent-maroon) 0%, #7A1F1F 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bg-success {
+    background: linear-gradient(135deg, var(--income-green) 0%, #229954 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bg-warning {
+    background: linear-gradient(135deg, #E67E22 0%, #D35400 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Text Utilities */
+.text-gray {
+    color: var(--text-gray) !important;
+}
+
+.text-muted {
+    color: #A0A0A0 !important;
+    opacity: 0.9;
+}
+
+.text-income {
+    color: #2ECC71 !important;
+    font-weight: 600;
+}
+
+.text-expense {
+    color: #E74C3C !important;
+    font-weight: 600;
+}
+
+/* About Us Page Styles */
+.about-section {
+    padding: 2rem 0;
+}
+
+.about-header {
+    border-bottom: 2px solid var(--accent-maroon);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.service-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.service-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.service-list li:before {
+    content: "-";
+    color: var(--accent-maroon);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+/* Filter Section */
+.filter-section {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .jumbotron {
+        padding: 2rem 1rem;
+    }
+    
+    .jumbotron h1 {
+        font-size: 2rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .form-control,
+    .form-select {
+        padding: 10px 12px;
+        height: 44px;
+    }
+    
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+    
+    .summary-card .amount {
+        font-size: 1.5rem;
+    }
+    
+    .card.text-white .card-body {
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--primary-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-maroon);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #7A1F1F;
+}
+
+/* Print Styles */
+@media print {
+    .navbar,
+    .card-header button,
+    .btn,
+    .jumbotron,
+    .form-select,
+    .filter-section {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .table {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .table th {
+        background: #f8f9fa !important;
+        color: black !important;
+    }
+    
+    .table td {
+        color: black !important;
+    }
+}

@@ -1,0 +1,113 @@
+<%- include('partials/header', {title: title, user: user}) %>
+
+<div class="row">
+    <div class="col-12">
+        <h2>📋 My Approval Requests</h2>
+        <p class="text-gray">Status request yang Anda ajukan</p>
+
+        <% if (error) { %>
+            <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Daftar Request Saya</h5>
+            </div>
+            <div class="card-body">
+                <% if (requests && requests.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Aksi</th>
+                                    <th>Tabel</th>
+                                    <th>Data</th>
+                                    <th>Status</th>
+                                    <th>Tanggal</th>
+                                    <th>Catatan Admin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% requests.forEach((req, index) => { %>
+                                    <% const data = JSON.parse(req.data_json); %>
+                                    <tr>
+                                        <td><%= index + 1 %></td>
+                                        <td>
+                                            <% if (req.action_type === 'create') { %>
+                                                <span class="badge bg-success">CREATE</span>
+                                            <% } else if (req.action_type === 'update') { %>
+                                                <span class="badge bg-warning">UPDATE</span>
+                                            <% } else { %>
+                                                <span class="badge bg-danger">DELETE</span>
+                                            <% } %>
+                                        </td>
+                                        <td><%= req.table_name %></td>
+                                        <td>
+                                            <small>
+                                                <% if (req.action_type === 'delete') { %>
+                                                    ID: <%= req.item_id %>
+                                                <% } else { %>
+                                                    <% if (data.nama_barang) { %>
+                                                        <%= data.nama_barang %>
+                                                    <% } %>
+                                                    <% if (data.deskripsi) { %>
+                                                        <%= data.deskripsi %>
+                                                    <% } %>
+                                                    <% if (data.nominal) { %>
+                                                        - Rp <%= Number(data.nominal).toLocaleString('id-ID') %>
+                                                    <% } %>
+                                                <% } %>
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <% if (req.status === 'pending') { %>
+                                                <span class="badge bg-warning">⏳ PENDING</span>
+                                            <% } else if (req.status === 'approved') { %>
+                                                <span class="badge bg-success">✓ APPROVED</span>
+                                            <% } else { %>
+                                                <span class="badge bg-danger">✗ REJECTED</span>
+                                            <% } %>
+                                        </td>
+                                        <td><%= new Date(req.created_at).toLocaleString('id-ID') %></td>
+                                        <td>
+                                            <% if (req.admin_notes) { %>
+                                                <small class="text-muted"><%= req.admin_notes %></small>
+                                            <% } else { %>
+                                                <small class="text-muted">-</small>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="text-center py-4">
+                        <p class="text-muted">Belum ada request yang diajukan</p>
+                        <small>Request Anda akan muncul di sini setelah mengajukan perubahan data</small>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="alert alert-info">
+            <h5>ℹ️ Informasi Status Request</h5>
+            <ul class="mb-0">
+                <li><span class="badge bg-warning">PENDING</span> - Request menunggu review admin</li>
+                <li><span class="badge bg-success">APPROVED</span> - Request disetujui dan sudah diterapkan</li>
+                <li><span class="badge bg-danger">REJECTED</span> - Request ditolak oleh admin</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
