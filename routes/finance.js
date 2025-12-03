@@ -84,6 +84,72 @@ router.post('/pemasukan', requireAuth, (req, res) => {
     }
 });
 
+router.post('/pemasukan/bulk', requireAuth, (req, res) => {
+    const user = req.session.user;
+    let { deskripsi, nominal } = req.body;
+    const tanggal = new Date().toISOString().split('T')[0];
+    if (!Array.isArray(deskripsi)) deskripsi = deskripsi ? [deskripsi] : [];
+    if (!Array.isArray(nominal)) nominal = nominal ? [nominal] : [];
+
+    const items = [];
+    const len = Math.max(deskripsi.length, nominal.length);
+    for (let i = 0; i < len; i++) {
+        const d = deskripsi[i];
+        const n = nominal[i];
+        if (d && n) {
+            items.push({ tanggal, deskripsi: d, nominal: n });
+        }
+    }
+
+    if (items.length === 0) {
+        return res.redirect('/laporan/pemasukan?error=Minimal satu baris diisi');
+    }
+
+    if (user.role === 'admin') {
+        let processed = 0;
+        const next = () => {
+            if (processed >= items.length) {
+                return res.redirect(`/laporan/pemasukan?success=${items.length} data berhasil ditambahkan`);
+            }
+            const item = items[processed];
+            Finance.addPemasukan(item, (err) => {
+                if (err) {
+                    console.error(err);
+                    return res.redirect('/laporan/pemasukan?error=Gagal menambah sebagian data');
+                }
+                processed++;
+                next();
+            });
+        };
+        next();
+    } else if (user.role === 'montir') {
+        let processed = 0;
+        const next = () => {
+            if (processed >= items.length) {
+                return res.redirect(`/laporan/pemasukan?success=Request untuk ${items.length} data dikirim, menunggu approval admin`);
+            }
+            const item = items[processed];
+            const requestData = {
+                montir_id: user.id,
+                action_type: 'create',
+                table_name: 'pemasukan',
+                data: item
+            };
+            Approval.createRequest(requestData, (err) => {
+                if (err) {
+                    console.error(err);
+                    return res.redirect('/laporan/pemasukan?error=Gagal membuat sebagian request approval');
+                }
+                processed++;
+                next();
+            });
+        };
+        next();
+    } else {
+        res.redirect('/laporan/pemasukan?error=Anda tidak memiliki akses untuk menambah data');
+    }
+});
+
 // Pengeluaran Page - Semua role bisa akses (READ) dengan filter
 router.get('/pengeluaran', requireAuth, (req, res) => {
     const { kategori, start_date, end_date } = req.query;
@@ -163,6 +229,74 @@ router.post('/pengeluaran', requireAuth, (req, res) => {
     }
     // Visitor tidak bisa
     else {
+        res.redirect('/laporan/pengeluaran?error=Anda tidak memiliki akses untuk menambah data');
+    }
+});
+
+router.post('/pengeluaran/bulk', requireAuth, (req, res) => {
+    const user = req.session.user;
+    let { deskripsi, nominal, kategori } = req.body;
+    const tanggal = new Date().toISOString().split('T')[0];
+    if (!Array.isArray(deskripsi)) deskripsi = deskripsi ? [deskripsi] : [];
+    if (!Array.isArray(nominal)) nominal = nominal ? [nominal] : [];
+    if (!Array.isArray(kategori)) kategori = kategori ? [kategori] : [];
+
+    const items = [];
+    const len = Math.max(deskripsi.length, nominal.length, kategori.length);
+    for (let i = 0; i < len; i++) {
+        const d = deskripsi[i];
+        const n = nominal[i];
+        const k = kategori[i];
+        if (d && n && k) {
+            items.push({ tanggal, deskripsi: d, nominal: n, kategori: k });
+        }
+    }
+
+    if (items.length === 0) {
+        return res.redirect('/laporan/pengeluaran?error=Minimal satu baris diisi');
+    }
+
+    if (user.role === 'admin') {
+        let processed = 0;
+        const next = () => {
+            if (processed >= items.length) {
+                return res.redirect(`/laporan/pengeluaran?success=${items.length} data berhasil ditambahkan`);
+            }
+            const item = items[processed];
+            Finance.addPengeluaran(item, (err) => {
+                if (err) {
+                    console.error(err);
+                    return res.redirect('/laporan/pengeluaran?error=Gagal menambah sebagian data');
+                }
+                processed++;
+                next();
+            });
+        };
+        next();
+    } else if (user.role === 'montir') {
+        let processed = 0;
+        const next = () => {
+            if (processed >= items.length) {
+                return res.redirect(`/laporan/pengeluaran?success=Request untuk ${items.length} data dikirim, menunggu approval admin`);
+            }
+            const item = items[processed];
+            const requestData = {
+                montir_id: user.id,
+                action_type: 'create',
+                table_name: 'pengeluaran',
+                data: item
+            };
+            Approval.createRequest(requestData, (err) => {
+                if (err) {
+                    console.error(err);
+                    return res.redirect('/laporan/pengeluaran?error=Gagal membuat sebagian request approval');
+                }
+                processed++;
+                next();
+            });
+        };
+        next();
+    } else {
         res.redirect('/laporan/pengeluaran?error=Anda tidak memiliki akses untuk menambah data');
     }
 });

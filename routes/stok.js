@@ -82,6 +82,75 @@ router.post('/barang', requireAuth, (req, res) => {
     }
 });
 
+router.post('/barang/bulk', requireAuth, (req, res) => {
+    const user = req.session.user;
+    let { nama_barang, jumlah, harga, kategori } = req.body;
+    if (!Array.isArray(nama_barang)) nama_barang = nama_barang ? [nama_barang] : [];
+    if (!Array.isArray(jumlah)) jumlah = jumlah ? [jumlah] : [];
+    if (!Array.isArray(harga)) harga = harga ? [harga] : [];
+    if (!Array.isArray(kategori)) kategori = kategori ? [kategori] : [];
+
+    const items = [];
+    const len = Math.max(nama_barang.length, jumlah.length, harga.length, kategori.length);
+    for (let i = 0; i < len; i++) {
+        const n = nama_barang[i];
+        const j = jumlah[i];
+        const h = harga[i];
+        const k = kategori[i];
+        if (n && j && h && k) {
+            items.push({ nama_barang: n, jumlah: j, harga: h, kategori: k });
+        }
+    }
+
+    if (items.length === 0) {
+        return res.redirect('/stok/barang?error=Minimal satu baris diisi');
+    }
+
+    if (user.role === 'admin') {
+        let processed = 0;
+        const next = () => {
+            if (processed >= items.length) {
+                return res.redirect(`/stok/barang?success=${items.length} data berhasil ditambahkan`);
+            }
+            const item = items[processed];
+            StokBarang.create(item, (err) => {
+                if (err) {
+                    console.error(err);
+                    return res.redirect('/stok/barang?error=Gagal menambah sebagian data');
+                }
+                processed++;
+                next();
+            });
+        };
+        next();
+    } else if (user.role === 'montir') {
+        let processed = 0;
+        const next = () => {
+            if (processed >= items.length) {
+                return res.redirect(`/stok/barang?success=Request untuk ${items.length} data dikirim, menunggu approval`);
+            }
+            const item = items[processed];
+            const requestData = {
+                montir_id: user.id,
+                action_type: 'create',
+                table_name: 'stok_barang',
+                data: item
+            };
+            Approval.createRequest(requestData, (err) => {
+                if (err) {
+                    console.error(err);
+                    return res.redirect('/stok/barang?error=Gagal membuat sebagian request approval');
+                }
+                processed++;
+                next();
+            });
+        };
+        next();
+    } else {
+        res.redirect('/stok/barang?error=Anda tidak memiliki akses untuk menambah data');
+    }
+});
+
 // Edit stok barang page
 router.get('/barang/edit/:id', requireAuth, (req, res) => {
     const user = req.session.user;

@@ -69,6 +69,60 @@
                     </form>
                 </div>
             </div>
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Tambah Banyak Stok Barang</h5>
+                    <% if (user.role === 'montir') { %>
+                        <small class="text-warning">⚠️ Setiap baris akan diajukan untuk approval</small>
+                    <% } %>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/stok/barang/bulk" id="bulkStokForm">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Nama Barang</th>
+                                        <th>Jumlah</th>
+                                        <th>Harga</th>
+                                        <th>Kategori</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stokRows">
+                                    <tr>
+                                        <td><input type="text" class="form-control" name="nama_barang[]"></td>
+                                        <td><input type="number" class="form-control" name="jumlah[]"></td>
+                                        <td><input type="number" step="0.01" class="form-control" name="harga[]"></td>
+                                        <td>
+                                            <select class="form-select" name="kategori[]">
+                                                <option value="">Pilih</option>
+                                                <option value="Oli">Oli</option>
+                                                <option value="Ban">Ban</option>
+                                                <option value="Aki">Aki</option>
+                                                <option value="Sparepart">Sparepart</option>
+                                                <option value="Tools">Tools</option>
+                                                <option value="Lainnya">Lainnya</option>
+                                            </select>
+                                        </td>
+                                        <td><button type="button" class="btn btn-sm btn-outline-danger remove-row">Hapus</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary" id="addStokRow">Tambah Baris</button>
+                            <button type="submit" class="btn btn-primary">
+                                <% if (user.role === 'admin') { %>
+                                    Simpan Banyak
+                                <% } else { %>
+                                    Ajukan Banyak
+                                <% } %>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <div class="col-md-8">
@@ -155,6 +209,40 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    const addBtn = document.getElementById('addStokRow');
+    if (addBtn) {
+        addBtn.addEventListener('click', function() {
+            const tbody = document.getElementById('stokRows');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="text" class="form-control" name="nama_barang[]"></td>
+                <td><input type="number" class="form-control" name="jumlah[]"></td>
+                <td><input type="number" step="0.01" class="form-control" name="harga[]"></td>
+                <td>
+                    <select class="form-select" name="kategori[]">
+                        <option value="">Pilih</option>
+                        <option value="Oli">Oli</option>
+                        <option value="Ban">Ban</option>
+                        <option value="Aki">Aki</option>
+                        <option value="Sparepart">Sparepart</option>
+                        <option value="Tools">Tools</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </td>
+                <td><button type="button" class="btn btn-sm btn-outline-danger remove-row">Hapus</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('remove-row')) {
+                const tr = e.target.closest('tr');
+                const tbody = document.getElementById('stokRows');
+                if (tbody && tr && tbody.children.length > 1) {
+                    tr.remove();
+                }
+            }
+        });
+    }
 });
 </script>
 

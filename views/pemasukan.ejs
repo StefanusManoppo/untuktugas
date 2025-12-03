@@ -66,6 +66,46 @@
                     </form>
                 </div>
             </div>
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Tambah Banyak Pemasukan</h5>
+                    <% if (user.role === 'montir') { %>
+                        <small class="text-warning">⚠️ Setiap baris akan diajukan untuk approval</small>
+                    <% } %>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/laporan/pemasukan/bulk" id="bulkPemasukanForm">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Deskripsi</th>
+                                        <th>Nominal (Rp)</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pemasukanRows">
+                                    <tr>
+                                        <td><input type="text" class="form-control" name="deskripsi[]"></td>
+                                        <td><input type="number" class="form-control" name="nominal[]" min="0" step="1000"></td>
+                                        <td><button type="button" class="btn btn-sm btn-outline-danger remove-row">Hapus</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary" id="addPemasukanRow">Tambah Baris</button>
+                            <button type="submit" class="btn btn-success">
+                                <% if (user.role === 'admin') { %>
+                                    Simpan Banyak
+                                <% } else { %>
+                                    Ajukan Banyak
+                                <% } %>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <div class="col-md-8">
@@ -120,5 +160,32 @@
         </div>
     </div>
 <% } %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addBtn = document.getElementById('addPemasukanRow');
+    if (addBtn) {
+        addBtn.addEventListener('click', function() {
+            const tbody = document.getElementById('pemasukanRows');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type=\"text\" class=\"form-control\" name=\"deskripsi[]\"></td>
+                <td><input type=\"number\" class=\"form-control\" name=\"nominal[]\" min=\"0\" step=\"1000\"></td>
+                <td><button type=\"button\" class=\"btn btn-sm btn-outline-danger remove-row\">Hapus</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('remove-row')) {
+                const tr = e.target.closest('tr');
+                const tbody = document.getElementById('pemasukanRows');
+                if (tbody && tr && tbody.children.length > 1) {
+                    tr.remove();
+                }
+            }
+        });
+    }
+});
+</script>
 
 <%- include('partials/footer') %>
