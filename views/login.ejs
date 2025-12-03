@@ -10,15 +10,57 @@
             </div>
             <div class="card-body">
                 <!-- Success Message jika signup berhasil -->
-                <% if (typeof signup_success !== 'undefined' || (typeof query !== 'undefined' && query.signup_success)) { %>
-                <div class="alert alert-success">
-                    ✅ Signup berhasil! Silakan login dengan akun Anda.
+                <% if (signup_success) { %>
+                <div class="alert alert-success" id="signupSuccessAlert">
+                    <div class="d-flex align-items-center">
+                        <div style="font-size: 2.5rem; margin-right: 1rem;">✅</div>
+                        <div>
+                            <strong>Signup Berhasil!</strong><br>
+                            <span>Akun Anda telah dibuat. Silakan login dengan username dan password yang telah didaftarkan.</span>
+                        </div>
+                    </div>
                 </div>
+                <style>
+                    #signupSuccessAlert {
+                        animation: slideDown 0.5s ease-out;
+                    }
+                    @keyframes slideDown {
+                        from {
+                            opacity: 0;
+                            transform: translateY(-20px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+                </style>
+                <script>
+                    // Auto hide success message setelah 5 detik
+                    setTimeout(() => {
+                        const successAlert = document.getElementById('signupSuccessAlert');
+                        if (successAlert) {
+                            successAlert.style.transition = 'opacity 0.5s ease-out';
+                            successAlert.style.opacity = '0';
+                            setTimeout(() => {
+                                successAlert.remove();
+                            }, 500);
+                        }
+                    }, 5000);
+                </script>
                 <% } %>
 
                 <!-- Error Message -->
                 <% if (error) { %>
-                <div class="alert alert-danger"><%= error %></div>
+                <div class="alert alert-danger" id="errorAlert">
+                    <div class="d-flex align-items-center">
+                        <div style="font-size: 2rem; margin-right: 1rem;">❌</div>
+                        <div>
+                            <strong>Login Gagal!</strong><br>
+                            <%= error %>
+                        </div>
+                    </div>
+                </div>
                 <% } %>
                 
                 <form method="POST" action="/login" id="loginForm">

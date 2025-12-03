@@ -12,10 +12,14 @@ const redirectIfAuth = (req, res, next) => {
 
 // Login page
 router.get('/login', redirectIfAuth, (req, res) => {
+    // Cek apakah ada parameter signup_success dari query string
+    const signupSuccess = req.query.signup_success === 'true';
+    
     res.render('login', { 
         title: 'Login',
         user: null,
-        error: null 
+        error: null,
+        signup_success: signupSuccess
     });
 });
 
@@ -28,7 +32,8 @@ router.post('/login', redirectIfAuth, (req, res) => {
         return res.render('login', {
             title: 'Login',
             user: null,
-            error: 'Username dan password wajib diisi!'
+            error: 'Username dan password wajib diisi!',
+            signup_success: false
         });
     }
 
@@ -37,7 +42,8 @@ router.post('/login', redirectIfAuth, (req, res) => {
         return res.render('login', {
             title: 'Login',
             user: null,
-            error: 'Username minimal 3 karakter!'
+            error: 'Username minimal 3 karakter!',
+            signup_success: false
         });
     }
 
@@ -45,7 +51,8 @@ router.post('/login', redirectIfAuth, (req, res) => {
         return res.render('login', {
             title: 'Login',
             user: null,
-            error: 'Password minimal 5 karakter!'
+            error: 'Password minimal 5 karakter!',
+            signup_success: false
         });
     }
     
@@ -56,7 +63,8 @@ router.post('/login', redirectIfAuth, (req, res) => {
             return res.render('login', {
                 title: 'Login',
                 user: null,
-                error: 'Terjadi kesalahan sistem'
+                error: 'Terjadi kesalahan sistem',
+                signup_success: false
             });
         }
         
@@ -64,7 +72,8 @@ router.post('/login', redirectIfAuth, (req, res) => {
             return res.render('login', {
                 title: 'Login',
                 user: null,
-                error: 'Username atau password salah!'
+                error: 'Username atau password salah!',
+                signup_success: false
             });
         }
         
@@ -179,8 +188,14 @@ router.post('/signup', redirectIfAuth, (req, res) => {
                 });
             }
 
-            // Signup successful - redirect to login with success message
-            res.redirect('/login?signup_success=true');
+            // Signup successful - render page dengan success message
+            // Tidak redirect langsung, biarkan JavaScript handle redirect
+            res.render('signup', {
+                title: 'Sign Up',
+                user: null,
+                error: null,
+                success: 'Akun berhasil dibuat! Anda akan diarahkan ke halaman login dalam 3 detik...'
+            });
         });
     });
 });
